@@ -3,22 +3,22 @@ import { useAuth } from "../context/AuthContext";
 
 const CATEGORIES = [
   {
-    icon: "📝", title: "Text-Based MCQs", count: 5,
+    key: "text", icon: "📝", title: "Text-Based MCQs", count: 5,
     desc: "Scenario-driven questions evaluating decision-making in real driving situations.",
     color: "#4f46e5", bg: "#eef2ff", border: "#c7d2fe", tag: "Cognitive",
   },
   {
-    icon: "🎧", title: "Audio-Based MCQs", count: 5,
+    key: "audio", icon: "🎧", title: "Audio-Based MCQs", count: 5,
     desc: "Listen to realistic driving scenarios and choose the safest course of action.",
     color: "#7c3aed", bg: "#ede9fe", border: "#c4b5fd", tag: "Perception",
   },
   {
-    icon: "🖼️", title: "Image Psychometrics", count: 5,
+    key: "image", icon: "🖼️", title: "Image Psychometrics", count: 5,
     desc: "Analyze visual driving scenes to evaluate psychological response and empathy.",
     color: "#d97706", bg: "#fef3c7", border: "#fcd34d", tag: "Emotional",
   },
   {
-    icon: "🎬", title: "Video Scenarios", count: 5,
+    key: "video", icon: "🎬", title: "Video Scenarios", count: 5,
     desc: "Watch dynamic video clips of road hazards to test real-time reaction.",
     color: "#0ea5e9", bg: "#e0f2fe", border: "#bae6fd", tag: "Reactive",
   },
@@ -112,9 +112,12 @@ export default function Dashboard() {
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
           {CATEGORIES.map((c, i) => (
-            <div key={i} className="card card-hover anim-up" style={{
-              padding: "28px 24px", animationDelay: `${0.25 + i * 0.1}s`,
-            }}>
+            <div key={i} className="card card-hover anim-up" 
+              onClick={() => nav("/test", { state: { startCategory: c.key } })}
+              style={{
+                padding: "28px 24px", animationDelay: `${0.25 + i * 0.1}s`, cursor: "pointer"
+              }}
+            >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
                 <div style={{
                   width: 52, height: 52, borderRadius: 16,
@@ -130,9 +133,15 @@ export default function Dashboard() {
               </div>
               <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: c.color, marginBottom: 8 }}>{c.title}</h3>
               <p style={{ fontSize: "0.85rem", color: "#64748b", lineHeight: 1.65, marginBottom: 16 }}>{c.desc}</p>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#94a3b8", fontSize: "0.82rem", fontWeight: 600 }}>
-                <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: c.color }} />
-                {c.count} Questions
+              
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#94a3b8", fontSize: "0.82rem", fontWeight: 600 }}>
+                  <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: c.color }} />
+                  {c.count} Questions
+                </div>
+                <span style={{ fontSize: "0.82rem", fontWeight: 700, color: c.color, display: "flex", alignItems: "center", gap: 4 }}>
+                  Start →
+                </span>
               </div>
             </div>
           ))}

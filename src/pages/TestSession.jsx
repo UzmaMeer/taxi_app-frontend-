@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { fetchAllMCQs, submitAnswers } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import QuestionCard from "../components/QuestionCard";
@@ -8,6 +8,7 @@ const DURATION = 720;
 
 export default function TestSession() {
   const nav = useNavigate();
+  const { state } = useLocation();
   const { user } = useAuth();
 
   const [qs, setQs] = useState([]);
@@ -19,11 +20,22 @@ export default function TestSession() {
   const [time, setTime] = useState(DURATION);
   const tRef = useRef(null);
 
+  const startCategory = state?.startCategory;
+
   useEffect(() => {
     fetchAllMCQs()
-      .then(d => { setQs(d); setLoading(false); })
+      .then(d => {
+        setQs(d);
+        if (startCategory) {
+          const firstIdx = d.findIndex(q => q.category === startCategory);
+          if (firstIdx !== -1) {
+            setIdx(firstIdx);
+          }
+        }
+        setLoading(false);
+      })
       .catch(() => { setErr("Failed to load questions. Is the backend running?"); setLoading(false); });
-  }, []);
+  }, [startCategory]);
 
   useEffect(() => {
     if (loading || err) return;
