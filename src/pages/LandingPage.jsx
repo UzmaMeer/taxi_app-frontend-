@@ -1,5 +1,5 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const FEATURES = [
@@ -26,6 +26,16 @@ export default function LandingPage() {
   const { user } = useAuth();
   const [hovered, setHovered] = useState(null);
   const go = user ? "/dashboard" : "/signup";
+
+  const words = ["Intelligent", "Reliable", "Safe", "Advanced"];
+  const [wordIdx, setWordIdx] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIdx((prev) => (prev + 1) % words.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div style={{ minHeight: "100vh" }}>
@@ -76,7 +86,7 @@ export default function LandingPage() {
           fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)", fontWeight: 600,
           color: "#475569", marginBottom: 20,
         }}>
-          Intelligent Driver Assessment System
+          <span style={{ color: "#4f46e5", transition: "all 0.3s ease" }}>{words[wordIdx]}</span> Driver Assessment System
         </h2>
 
         <p className="anim-up d3" style={{

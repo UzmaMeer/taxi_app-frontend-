@@ -10,7 +10,7 @@ import ResultDashboard from "./pages/ResultDashboard";
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return null;
-  if (!user) return <Navigate to="/signin" replace />;
+  if (!user) return <Navigate to="/" replace />;
   return children;
 }
 
@@ -38,7 +38,11 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
-      <div className="bg-pattern" />
+      <div className="bg-pattern">
+        <div className="blob blob-1"></div>
+        <div className="blob blob-2"></div>
+        <div className="blob blob-3"></div>
+      </div>
       <div style={{ position: "relative", zIndex: 1 }}>
         <AppRoutes />
       </div>
