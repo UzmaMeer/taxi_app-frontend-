@@ -224,9 +224,8 @@ audio { width: 100%; max-width: 400px; height: 40px; border-radius: 999px; }
   background: #000;
 }
 
-.video-frame img {
+.video-frame video {
   width: 100%; height: 100%; object-fit: cover; display: block;
-  animation: video-zoom 4s infinite alternate ease-in-out;
 }
 
 .video-overlay {

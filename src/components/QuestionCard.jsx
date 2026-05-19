@@ -39,11 +39,18 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         </div>
       )}
 
-      {/* ── Video (CSS Animated Loop) ── */}
+      {/* ── Video (Actual MP4) ── */}
       {question.category === "video" && question.media_url && (
-        <div className="video-frame" style={{ marginBottom: 24 }}>
-          <div className="video-overlay"><div className="rec"></div> REC</div>
-          <img src={question.media_url} alt="Video Scenario" />
+        <div className="video-frame" style={{ marginBottom: 24, paddingBottom: "56.25%", position: "relative" }}>
+          <div className="video-overlay" style={{ zIndex: 10 }}><div className="rec"></div> REC</div>
+          <video 
+            src={question.media_url} 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          />
         </div>
       )}
 
