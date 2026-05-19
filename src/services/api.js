@@ -4,6 +4,19 @@ import axios from "axios";
 const baseURL = import.meta.env.VITE_API_URL || "/api";
 const api = axios.create({ baseURL, timeout: 15000 });
 
+// Helper to resolve media URLs dynamically
+export const getMediaURL = (path) => {
+  if (!path) return "";
+  if (path.startsWith("http")) return path;
+  
+  const apiURL = import.meta.env.VITE_API_URL;
+  if (apiURL) {
+    const base = apiURL.replace(/\/api$/, "");
+    return `${base}${path}`;
+  }
+  return path;
+};
+
 /* ─── Auth ─── */
 export async function registerUser(fullName, email, password) {
   const { data } = await api.post("/auth/register", { full_name: fullName, email, password });
