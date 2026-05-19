@@ -55,6 +55,43 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         </div>
       )}
 
+      {/* ── Video Scene Description ── */}
+      {question.category === "video" && question.video_description && (
+        <div style={{
+          background: "rgba(255, 255, 255, 0.03)",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRadius: 14,
+          padding: "16px 20px",
+          marginBottom: 20,
+          fontSize: "0.88rem",
+          lineHeight: 1.6,
+          color: "#cbd5e1"
+        }}>
+          <strong style={{ color: "#a5b4fc" }}>🎥 Video Scene:</strong> {question.video_description}
+        </div>
+      )}
+
+      {/* ── Metadata Tags (Behavioral Category & Difficulty) ── */}
+      {(question.difficulty || question.behavioral_category) && (
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
+          {question.behavioral_category && (
+            <span className="tag tag-audio" style={{ fontSize: "0.68rem", fontWeight: 700 }}>
+              🧠 {question.behavioral_category}
+            </span>
+          )}
+          {question.difficulty && (
+            <span className="tag" style={{ 
+              fontSize: "0.68rem",
+              fontWeight: 700,
+              background: question.difficulty === "Hard" ? "rgba(239, 68, 68, 0.15)" : question.difficulty === "Medium" ? "rgba(245, 158, 11, 0.15)" : "rgba(16, 185, 129, 0.15)",
+              color: question.difficulty === "Hard" ? "#f87171" : question.difficulty === "Medium" ? "#fbbf24" : "#34d399"
+            }}>
+              📶 {question.difficulty}
+            </span>
+          )}
+        </div>
+      )}
+
       {/* ── Question ── */}
       <h2 style={{
         fontSize: "clamp(1rem, 2.2vw, 1.2rem)", fontWeight: 700,
