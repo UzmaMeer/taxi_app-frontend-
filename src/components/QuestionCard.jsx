@@ -11,6 +11,13 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
     playing ? audioRef.current.pause() : audioRef.current.play().catch(() => {});
   };
 
+  const getMediaUrl = (url) => {
+    if (!url) return "";
+    if (url.startsWith("http")) return url;
+    const base = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api\/?$/, "") : "http://localhost:8000";
+    return `${base}${url}`;
+  };
+
   return (
     <div className="card" style={{ padding: "clamp(24px, 4vw, 36px)", overflow: "hidden" }}>
 
@@ -25,7 +32,7 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
             </svg>
           </button>
           <p style={{ color: "#64748b", fontSize: "0.85rem", fontWeight: 500 }}>🎧 Listen to the question, then select your answer</p>
-          <audio ref={audioRef} src={question.media_url}
+          <audio ref={audioRef} src={getMediaUrl(question.media_url)}
             onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
             controls style={{ width: "100%", maxWidth: 400, height: 40 }}
           />
@@ -35,16 +42,18 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
       {/* ── Image ── */}
       {question.category === "image" && question.media_url && (
         <div className="img-frame" style={{ marginBottom: 24 }}>
-          <img src={question.media_url} alt="Driving scenario" loading="eager" />
+          <img src={getMediaUrl(question.media_url)} alt="Driving scenario" loading="eager" />
         </div>
       )}
 
       {/* ── Video (Actual MP4) ── */}
       {question.category === "video" && question.media_url && (
-        <div className="video-frame" style={{ marginBottom: 24, paddingBottom: "56.25%", position: "relative" }}>
-          <div className="video-overlay" style={{ zIndex: 10 }}><div className="rec"></div> REC</div>
+        <div className="video-frame" style={{ marginBottom: 24, paddingBottom: "56.25%", position: "relative", borderRadius: 12, overflow: "hidden", background: "#000" }}>
+          <div className="video-overlay" style={{ zIndex: 10, position: "absolute", top: 10, right: 10, background: "rgba(0,0,0,0.5)", padding: "4px 8px", borderRadius: 4, color: "#fff", display: "flex", alignItems: "center", gap: 6, fontSize: "0.8rem", fontWeight: 700 }}>
+            <div className="rec" style={{ width: 8, height: 8, background: "#ef4444", borderRadius: "50%", animation: "blink 1s infinite" }}></div> REC
+          </div>
           <video 
-            src={question.media_url} 
+            src={getMediaUrl(question.media_url)} 
             autoPlay 
             loop 
             muted 
