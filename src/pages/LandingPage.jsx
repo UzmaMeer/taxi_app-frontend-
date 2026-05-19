@@ -104,7 +104,7 @@ export default function LandingPage() {
           <div className="anim-up d3" style={{ flex: "1 1 400px", display: "flex", justifyContent: "center" }}>
             <div style={{
               width: "100%", maxWidth: 500, borderRadius: 24, overflow: "hidden",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.1)", border: "4px solid #fff",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.3)", border: "4px solid rgba(255, 255, 255, 0.08)",
               position: "relative"
             }}>
               <img src="/static/images/landing_hero.png" alt="Driving Dashboard" style={{ width: "100%", display: "block" }} />

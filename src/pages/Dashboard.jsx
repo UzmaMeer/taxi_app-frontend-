@@ -154,8 +154,6 @@ export default function Dashboard() {
           padding: "clamp(32px, 5vw, 48px)",
           display: "flex", alignItems: "center", justifyContent: "space-between",
           flexWrap: "wrap", gap: 24,
-          background: "linear-gradient(135deg, #eef2ff, #f0f9ff)",
-          borderColor: "#c7d2fe", borderRadius: 22,
         }}>
           <div style={{ flex: 1, minWidth: 240 }}>
             <h3 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: 8, color: "#1e293b" }}>
