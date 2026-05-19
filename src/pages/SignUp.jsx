@@ -31,7 +31,7 @@ export default function SignUp() {
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div style={{ width: "100%", maxWidth: 900, display: "flex", borderRadius: 24, overflow: "hidden", boxShadow: "0 8px 40px rgba(0,0,0,0.08)" }}>
+      <div className="card anim-scale" style={{ width: "100%", maxWidth: 900, display: "flex", overflow: "hidden" }}>
 
         {/* Left panel - visual */}
         <div style={{
@@ -50,7 +50,7 @@ export default function SignUp() {
         </div>
 
         {/* Right panel - form */}
-        <div style={{ flex: 1, background: "#fff", padding: "clamp(28px, 5vw, 48px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <div style={{ flex: 1, padding: "clamp(28px, 5vw, 48px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 28 }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: "linear-gradient(135deg,#4f46e5,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🚗</div>
             <span style={{ fontWeight: 800, fontSize: "1.1rem" }}>Drive<span style={{ color: "#4f46e5" }}>IQ</span></span>
