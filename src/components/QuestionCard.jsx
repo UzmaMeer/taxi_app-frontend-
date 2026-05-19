@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { getMediaURL } from "../services/api";
 
-const LABELS = ["A", "B", "C", "D", "E", "F"];
+const LABELS = ["1", "2", "3", "4", "5", "6"];
 
 export default function QuestionCard({ question, selectedAnswer, onSelect }) {
   const [playing, setPlaying] = useState(false);
