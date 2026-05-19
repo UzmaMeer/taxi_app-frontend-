@@ -4,7 +4,7 @@ import { fetchAllMCQs, submitAnswers } from "../services/api";
 import { useAuth } from "../context/AuthContext";
 import QuestionCard from "../components/QuestionCard";
 
-const DURATION = 600;
+const DURATION = 720;
 
 export default function TestSession() {
   const nav = useNavigate();
@@ -101,7 +101,7 @@ export default function TestSession() {
             {idx + 1}<span style={{ color: "#94a3b8", fontWeight: 500 }}> / {qs.length}</span>
           </span>
           <span className={`tag tag-${q.category}`}>
-            {q.category === "text" ? "📝" : q.category === "audio" ? "🎧" : "🖼️"} {q.category}
+            {q.category === "text" ? "📝" : q.category === "audio" ? "🎧" : q.category === "video" ? "🎬" : "🖼️"} {q.category}
           </span>
         </div>
         <div style={{

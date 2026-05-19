@@ -4,6 +4,7 @@ const CAT = {
   text:  { icon: "📝", label: "Text Understanding",    color: "#4f46e5", bg: "#eef2ff" },
   audio: { icon: "🎧", label: "Audio Comprehension",   color: "#7c3aed", bg: "#ede9fe" },
   image: { icon: "🖼️", label: "Image Decision-Making", color: "#d97706", bg: "#fef3c7" },
+  video: { icon: "🎬", label: "Video Reaction Time",   color: "#0ea5e9", bg: "#e0f2fe" },
 };
 
 function Gauge({ pct, size = 160, stroke = 12, color }) {

@@ -17,11 +17,16 @@ const CATEGORIES = [
     desc: "Analyze visual driving scenes to evaluate psychological response and empathy.",
     color: "#d97706", bg: "#fef3c7", border: "#fcd34d", tag: "Emotional",
   },
+  {
+    icon: "🎬", title: "Video Scenarios", count: 5,
+    desc: "Watch dynamic video clips of road hazards to test real-time reaction.",
+    color: "#0ea5e9", bg: "#e0f2fe", border: "#bae6fd", tag: "Reactive",
+  },
 ];
 
 const QUICK_STATS = [
-  { icon: "📋", value: "15", label: "Total Questions" },
-  { icon: "⏱️", value: "10 min", label: "Time Limit" },
+  { icon: "📋", value: "20", label: "Total Questions" },
+  { icon: "⏱️", value: "12 min", label: "Time Limit" },
   { icon: "⚡", value: "< 1 sec", label: "API Speed" },
   { icon: "🏆", value: "Instant", label: "Results" },
 ];
@@ -148,7 +153,7 @@ export default function Dashboard() {
               🧪 Start Your Assessment
             </h3>
             <p style={{ color: "#64748b", fontSize: "0.9rem", lineHeight: 1.7 }}>
-              15 multimedia questions • 10 minute time limit • instant results with risk analysis
+              20 multimedia questions • 12 minute time limit • instant results with risk analysis
             </p>
           </div>
           <button className="btn-primary" onClick={() => nav("/test")} style={{

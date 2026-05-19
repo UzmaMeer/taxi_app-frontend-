@@ -6,18 +6,19 @@ const FEATURES = [
   { icon: "📝", title: "Text-Based MCQs", desc: "Scenario-driven questions testing your decision-making in real driving situations.", color: "#4f46e5", bg: "#eef2ff", border: "#c7d2fe" },
   { icon: "🎧", title: "Audio-Based MCQs", desc: "Listen to realistic driving scenarios and choose the safest course of action.", color: "#7c3aed", bg: "#ede9fe", border: "#c4b5fd" },
   { icon: "🖼️", title: "Image Psychometrics", desc: "Analyze visual scenes to evaluate your psychological response and empathy.", color: "#d97706", bg: "#fef3c7", border: "#fcd34d" },
+  { icon: "🎬", title: "Video Scenarios", desc: "Watch animated clips of dangerous driving behavior and identify the proper response.", color: "#0ea5e9", bg: "#e0f2fe", border: "#bae6fd" },
 ];
 
 const STATS = [
-  { value: "15", label: "Questions", icon: "📋" },
-  { value: "3", label: "Categories", icon: "🎯" },
+  { value: "20", label: "Questions", icon: "📋" },
+  { value: "4", label: "Categories", icon: "🎯" },
   { value: "<1s", label: "Response", icon: "⚡" },
-  { value: "10m", label: "Time Limit", icon: "⏱️" },
+  { value: "12m", label: "Time Limit", icon: "⏱️" },
 ];
 
 const STEPS = [
   { num: "01", title: "Enter Your Name", desc: "Provide your name to personalize the assessment and your result card.", color: "#4f46e5", icon: "👤" },
-  { num: "02", title: "Answer 15 MCQs", desc: "Navigate through text, audio, and image questions within the 10-minute timer.", color: "#0ea5e9", icon: "✍️" },
+  { num: "02", title: "Answer 20 MCQs", desc: "Navigate through text, audio, image, and video questions within the 12-minute timer.", color: "#0ea5e9", icon: "✍️" },
   { num: "03", title: "Get Instant Results", desc: "Receive a detailed scorecard with risk level, category breakdown, and 12-hour driving eligibility.", color: "#10b981", icon: "📊" },
 ];
 
@@ -62,50 +63,54 @@ export default function LandingPage() {
       </nav>
 
       {/* ═══ HERO ═══ */}
-      <section style={{ padding: "60px 24px 40px", textAlign: "center", maxWidth: 800, margin: "0 auto" }}>
-        {/* Floating badge */}
-        <div className="anim-up d1" style={{ marginBottom: 24 }}>
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            padding: "8px 20px", borderRadius: 999,
-            background: "#eef2ff", border: "1px solid #c7d2fe",
-            fontSize: "0.8rem", fontWeight: 700, color: "#4f46e5",
-          }}>
-            ⚡ AI-Powered Driver Evaluation
-          </span>
-        </div>
+      <section style={{ padding: "60px 24px 40px", maxWidth: 1100, margin: "0 auto" }}>
+        
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 40, marginBottom: 40 }}>
+          <div style={{ flex: "1 1 400px", textAlign: "left" }}>
+            <h1 className="anim-up d1" style={{
+              fontSize: "clamp(2.5rem, 5vw, 4rem)", fontWeight: 900,
+              lineHeight: 1.1, marginBottom: 16, letterSpacing: "-1.5px",
+            }}>
+              Meet <span className="grad-text">DriveIQ</span>
+            </h1>
 
-        <h1 className="anim-up d2" style={{
-          fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 900,
-          lineHeight: 1.1, marginBottom: 12, letterSpacing: "-1.5px",
-        }}>
-          Meet <span className="grad-text">DriveIQ</span>
-        </h1>
+            <h2 className="anim-up d2" style={{
+              fontSize: "clamp(1.1rem, 2vw, 1.5rem)", fontWeight: 600,
+              color: "#475569", marginBottom: 24,
+            }}>
+              <span style={{ color: "#4f46e5", transition: "all 0.3s ease" }}>{words[wordIdx]}</span> Driver Assessment System
+            </h2>
 
-        <h2 className="anim-up d2" style={{
-          fontSize: "clamp(1.1rem, 2.5vw, 1.5rem)", fontWeight: 600,
-          color: "#475569", marginBottom: 20,
-        }}>
-          <span style={{ color: "#4f46e5", transition: "all 0.3s ease" }}>{words[wordIdx]}</span> Driver Assessment System
-        </h2>
+            <p className="anim-up d3" style={{
+              fontSize: "clamp(0.92rem, 1.3vw, 1.05rem)", color: "#64748b",
+              lineHeight: 1.8, marginBottom: 36, maxWidth: 500
+            }}>
+              Evaluate your driving skills, behavioral awareness, and psychological stability
+              through interactive multimedia assessments. Find out if you&apos;re ready for
+              long-haul 12-hour shifts.
+            </p>
 
-        <p className="anim-up d3" style={{
-          fontSize: "clamp(0.92rem, 1.6vw, 1.05rem)", color: "#64748b",
-          lineHeight: 1.8, maxWidth: 560, margin: "0 auto 36px",
-        }}>
-          Evaluate your driving skills, behavioral awareness, and psychological stability
-          through interactive multimedia assessments. Find out if you&apos;re ready for
-          long-haul 12-hour shifts.
-        </p>
-
-        {/* CTA */}
-        <div className="anim-up d4" style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", marginBottom: 48 }}>
-          <button className="btn-primary" onClick={() => nav(go)} style={{ padding: "17px 44px", fontSize: "1.05rem" }}>
-            🧪 Start Assessment
-          </button>
-          <a href="#how" className="btn-outline" style={{ padding: "17px 36px" }}>
-            How it works ↓
-          </a>
+            {/* CTA */}
+            <div className="anim-up d4" style={{ display: "flex", gap: 14, flexWrap: "wrap" }}>
+              <button className="btn-primary" onClick={() => nav(go)} style={{ padding: "16px 40px", fontSize: "1.05rem" }}>
+                🧪 Start Assessment
+              </button>
+              <a href="#how" className="btn-outline" style={{ padding: "16px 32px" }}>
+                How it works ↓
+              </a>
+            </div>
+          </div>
+          
+          <div className="anim-up d3" style={{ flex: "1 1 400px", display: "flex", justifyContent: "center" }}>
+            <div style={{
+              width: "100%", maxWidth: 500, borderRadius: 24, overflow: "hidden",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.1)", border: "4px solid #fff",
+              position: "relative"
+            }}>
+              <img src="/static/images/landing_hero.png" alt="Driving Dashboard" style={{ width: "100%", display: "block" }} />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)" }} />
+            </div>
+          </div>
         </div>
 
         {/* Stats row */}
@@ -207,7 +212,7 @@ export default function LandingPage() {
           <div style={{ fontSize: 40, marginBottom: 16 }}>🏁</div>
           <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: 10 }}>Ready to Get Assessed?</h3>
           <p style={{ color: "#64748b", fontSize: "0.92rem", marginBottom: 28, lineHeight: 1.7 }}>
-            Takes about 10 minutes. Get instant results with detailed analytics.
+            Takes about 12 minutes. Get instant results with detailed analytics.
           </p>
           <button className="btn-primary" onClick={() => nav(go)} style={{ padding: "17px 48px", fontSize: "1.05rem" }}>
             🚀 Begin Now

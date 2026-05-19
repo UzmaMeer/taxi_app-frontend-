@@ -39,6 +39,14 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         </div>
       )}
 
+      {/* ── Video (CSS Animated Loop) ── */}
+      {question.category === "video" && question.media_url && (
+        <div className="video-frame" style={{ marginBottom: 24 }}>
+          <div className="video-overlay"><div className="rec"></div> REC</div>
+          <img src={question.media_url} alt="Video Scenario" />
+        </div>
+      )}
+
       {/* ── Question ── */}
       <h2 style={{
         fontSize: "clamp(1rem, 2.2vw, 1.2rem)", fontWeight: 700,
