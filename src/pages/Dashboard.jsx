@@ -5,22 +5,22 @@ const CATEGORIES = [
   {
     key: "text", icon: "📝", title: "Text-Based MCQs", count: 5,
     desc: "Scenario-driven questions evaluating decision-making in real driving situations.",
-    color: "#4f46e5", bg: "#eef2ff", border: "#c7d2fe", tag: "Cognitive",
+    color: "#1a1f71", bg: "#eef0fa", border: "#c7cce6", tag: "Cognitive",
   },
   {
     key: "audio", icon: "🎧", title: "Audio-Based MCQs", count: 5,
     desc: "Listen to realistic driving scenarios and choose the safest course of action.",
-    color: "#7c3aed", bg: "#ede9fe", border: "#c4b5fd", tag: "Perception",
+    color: "#1a1f71", bg: "#eef0fa", border: "#c7cce6", tag: "Perception",
   },
   {
     key: "image", icon: "🖼️", title: "Image Psychometrics", count: 5,
     desc: "Analyze visual driving scenes to evaluate psychological response and empathy.",
-    color: "#d97706", bg: "#fef3c7", border: "#fcd34d", tag: "Emotional",
+    color: "#1a1f71", bg: "#eef0fa", border: "#c7cce6", tag: "Emotional",
   },
   {
     key: "video", icon: "🎬", title: "Video Scenarios", count: 5,
     desc: "Watch dynamic video clips of road hazards to test real-time reaction.",
-    color: "#0ea5e9", bg: "#e0f2fe", border: "#bae6fd", tag: "Reactive",
+    color: "#1a1f71", bg: "#eef0fa", border: "#c7cce6", tag: "Reactive",
   },
 ];
 
@@ -39,7 +39,7 @@ export default function Dashboard() {
   const greeting = greetHour < 12 ? "Good Morning" : greetHour < 17 ? "Good Afternoon" : "Good Evening";
 
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <div style={{ minHeight: "100vh", background: "#f7f8fc" }}>
       {/* ═══ NAVBAR ═══ */}
       <nav style={{
         padding: "14px 24px",
@@ -48,22 +48,22 @@ export default function Dashboard() {
         flexWrap: "wrap", gap: 10,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg,#4f46e5,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🚗</div>
-          <span style={{ fontWeight: 800, fontSize: "1.1rem" }}>Drive<span style={{ color: "#4f46e5" }}>IQ</span></span>
+          <div style={{ width: 38, height: 38, borderRadius: 12, background: "#1a1f71", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>🚗</div>
+          <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "#1a1f71" }}>DriveIQ</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{
             display: "flex", alignItems: "center", gap: 8,
             padding: "8px 16px", borderRadius: 12,
-            background: "#eef2ff", border: "1px solid #c7d2fe",
+            background: "#eef0fa", border: "1px solid #c7cce6",
           }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg,#4f46e5,#7c3aed)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "0.75rem", fontWeight: 800 }}>
+            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "#1a1f71", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "0.75rem", fontWeight: 800 }}>
               {user?.full_name?.charAt(0)?.toUpperCase() || "D"}
             </div>
-            <span style={{ fontWeight: 600, fontSize: "0.88rem", color: "#4f46e5" }}>{user?.full_name || "Driver"}</span>
+            <span style={{ fontWeight: 600, fontSize: "0.88rem", color: "#1a1f71" }}>{user?.full_name || "Driver"}</span>
           </div>
           <button onClick={logout} style={{
-            padding: "8px 18px", borderRadius: 10, border: "2px solid #e2e8f0",
+            padding: "8px 18px", borderRadius: 10, border: "2px solid #d1d5e4",
             background: "#fff", cursor: "pointer", fontWeight: 600, fontSize: "0.82rem",
             fontFamily: "inherit", color: "#64748b", transition: "all 0.2s",
           }}>Logout</button>
@@ -73,9 +73,9 @@ export default function Dashboard() {
       {/* ═══ HERO AREA ═══ */}
       <section style={{ padding: "40px 24px 20px", maxWidth: 1000, margin: "0 auto" }}>
         <div className="anim-up" style={{ marginBottom: 32 }}>
-          <p style={{ fontSize: "0.88rem", color: "#94a3b8", fontWeight: 500, marginBottom: 6 }}>{greeting} 👋</p>
-          <h1 style={{ fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 900, color: "#1e293b", marginBottom: 8 }}>
-            Welcome, <span className="grad-text">{user?.full_name || "Driver"}</span>
+          <p style={{ fontSize: "0.88rem", color: "#64748b", fontWeight: 500, marginBottom: 6 }}>{greeting} 👋</p>
+          <h1 style={{ fontSize: "clamp(1.6rem, 4vw, 2.2rem)", fontWeight: 900, color: "#1a1f71", marginBottom: 8 }}>
+            Welcome, <span style={{ color: "#1a1f71" }}>{user?.full_name || "Driver"}</span>
           </h1>
           <p style={{ color: "#64748b", fontSize: "0.95rem", lineHeight: 1.7, maxWidth: 520 }}>
             Ready to evaluate your driving skills? Complete the assessment below to receive
@@ -91,10 +91,10 @@ export default function Dashboard() {
           {QUICK_STATS.map((s, i) => (
             <div key={i} style={{
               padding: "20px 12px", textAlign: "center",
-              borderRight: i < QUICK_STATS.length - 1 ? "1px solid #f1f5f9" : "none",
+              borderRight: i < QUICK_STATS.length - 1 ? "1px solid #e8ecf2" : "none",
             }}>
               <div style={{ fontSize: 22, marginBottom: 6 }}>{s.icon}</div>
-              <div style={{ fontSize: "1.15rem", fontWeight: 800, color: "#4f46e5" }}>{s.value}</div>
+              <div style={{ fontSize: "1.15rem", fontWeight: 800, color: "#1a1f71" }}>{s.value}</div>
               <div style={{ fontSize: "0.68rem", color: "#94a3b8", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px", marginTop: 2 }}>{s.label}</div>
             </div>
           ))}
@@ -103,11 +103,11 @@ export default function Dashboard() {
 
       {/* ═══ ASSESSMENT CATEGORIES ═══ */}
       <section style={{ padding: "0 24px 30px", maxWidth: 1000, margin: "0 auto" }}>
-        <h2 className="anim-up d2" style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: 8, color: "#1e293b" }}>
+        <h2 className="anim-up d2" style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: 8, color: "#1a1f71" }}>
           Assessment Categories
         </h2>
         <p className="anim-up d2" style={{ color: "#94a3b8", fontSize: "0.88rem", marginBottom: 24 }}>
-          Your test includes questions from all three dimensions
+          Your test includes questions from all four dimensions
         </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 18 }}>
@@ -127,19 +127,19 @@ export default function Dashboard() {
                 }}>{c.icon}</div>
                 <span style={{
                   padding: "4px 12px", borderRadius: 8,
-                  background: c.bg, color: c.color,
+                  background: "#f5c518", color: "#1a1f71",
                   fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px",
                 }}>{c.tag}</span>
               </div>
-              <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: c.color, marginBottom: 8 }}>{c.title}</h3>
+              <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#1a1f71", marginBottom: 8 }}>{c.title}</h3>
               <p style={{ fontSize: "0.85rem", color: "#64748b", lineHeight: 1.65, marginBottom: 16 }}>{c.desc}</p>
               
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#94a3b8", fontSize: "0.82rem", fontWeight: 600 }}>
-                  <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: c.color }} />
+                  <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#f5c518" }} />
                   {c.count} Questions
                 </div>
-                <span style={{ fontSize: "0.82rem", fontWeight: 700, color: c.color, display: "flex", alignItems: "center", gap: 4 }}>
+                <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#1a1f71", display: "flex", alignItems: "center", gap: 4 }}>
                   Start →
                 </span>
               </div>
@@ -156,7 +156,7 @@ export default function Dashboard() {
           flexWrap: "wrap", gap: 24,
         }}>
           <div style={{ flex: 1, minWidth: 240 }}>
-            <h3 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: 8, color: "#1e293b" }}>
+            <h3 style={{ fontSize: "1.3rem", fontWeight: 800, marginBottom: 8, color: "#1a1f71" }}>
               🧪 Start Your Assessment
             </h3>
             <p style={{ color: "#64748b", fontSize: "0.9rem", lineHeight: 1.7 }}>
@@ -166,7 +166,7 @@ export default function Dashboard() {
           <button className="btn-primary" onClick={() => nav("/test")} style={{
             padding: "18px 48px", fontSize: "1.1rem", flexShrink: 0,
           }}>
-            🚀 Begin Test
+            Begin Test →
           </button>
         </div>
       </section>
