@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import { getMediaURL } from "../services/api";
 
 const FEATURES = [
   { icon: "📝", title: "Text-Based MCQs", desc: "Scenario-driven questions testing your decision-making in real driving situations.", color: "#1a1f71", bg: "#eef0fa", border: "#c7cce6" },
@@ -107,7 +108,7 @@ export default function LandingPage() {
               boxShadow: "0 20px 40px rgba(0,0,0,0.1)", border: "3px solid #e8ecf2",
               position: "relative"
             }}>
-              <img src="/static/images/landing_hero.png" alt="Driving Dashboard" style={{ width: "100%", display: "block" }} />
+              <img src={getMediaURL("/static/images/landing_hero.png")} alt="Driving Dashboard" style={{ width: "100%", display: "block" }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.3), transparent)" }} />
             </div>
           </div>
