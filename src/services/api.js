@@ -45,3 +45,23 @@ export async function submitAnswers(userName, answers) {
   const { data } = await api.post("/submit-answers", { user_name: userName, answers });
   return data;
 }
+
+export async function fetchUserHistory(userName) {
+  try {
+    const { data } = await api.get(`/results/history/${userName}`);
+    return data;
+  } catch (err) {
+    return [];
+  }
+}
+
+export async function fetchLatestResult(userName) {
+  try {
+    const { data } = await api.get(`/result/${userName}`);
+    return data;
+  } catch (err) {
+    return null;
+  }
+}
+
+
