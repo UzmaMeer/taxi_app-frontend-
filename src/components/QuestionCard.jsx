@@ -52,13 +52,23 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
           }}>
             CAM-01 • {new Date().toLocaleDateString()}
           </div>
+          {/* Scenario description overlay at bottom */}
+          <div style={{
+            position: "absolute", bottom: 0, left: 0, right: 0, zIndex: 2,
+            background: "linear-gradient(transparent, rgba(0,0,0,0.75))",
+            padding: "40px 14px 12px",
+            color: "#fff", fontSize: "0.72rem", fontWeight: 600, lineHeight: 1.4,
+            fontFamily: "monospace"
+          }}>
+            📹 {question.video_description}
+          </div>
           <img
             src={getMediaURL(question.media_url)}
             alt={question.video_description || "Driving scenario footage"}
             loading="eager"
+            onError={(e) => { e.target.style.display = "none"; }}
             style={{
-              width: "100%", height: "100%", objectFit: "cover", display: "block",
-              animation: "dashcam 4s ease-in-out infinite alternate",
+              width: "100%", height: "280px", objectFit: "cover", display: "block",
             }}
           />
         </div>

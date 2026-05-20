@@ -6,6 +6,8 @@ import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
 import TestSession from "./pages/TestSession";
 import ResultDashboard from "./pages/ResultDashboard";
+import { useEffect } from "react";
+import { fetchAllMCQs, getMediaURL } from "./services/api";
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -36,6 +38,27 @@ function AppRoutes() {
 }
 
 export default function App() {
+  // Background preloader matching WhatsApp's zero-delay architecture
+  useEffect(() => {
+    fetchAllMCQs()
+      .then(questions => {
+        questions.forEach(q => {
+          if (q.media_url) {
+            const url = getMediaURL(q.media_url);
+            if (q.category === "image" || q.category === "video") {
+              const img = new Image();
+              img.src = url;
+            } else if (q.category === "audio") {
+              const audio = new Audio();
+              audio.src = url;
+              audio.preload = "auto";
+            }
+          }
+        });
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <AuthProvider>
       <div className="bg-pattern">
