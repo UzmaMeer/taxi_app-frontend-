@@ -40,17 +40,26 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         </div>
       )}
 
-      {/* ── Video (HTML5 Video Element) ── */}
+      {/* ── Video (Dashcam Footage Simulation) ── */}
       {question.category === "video" && question.media_url && (
         <div className="video-frame" style={{ marginBottom: 24 }}>
           <div className="video-overlay"><div className="rec"></div> REC</div>
-          <video 
-            src={`${getMediaURL(question.media_url)}?v=1.0.2`} 
-            autoPlay 
-            loop 
-            muted 
-            playsInline 
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          {/* Dashcam timestamp overlay */}
+          <div style={{
+            position: "absolute", bottom: 10, left: 12, zIndex: 3,
+            color: "rgba(255,255,255,0.7)", fontSize: "0.65rem", fontFamily: "monospace",
+            fontWeight: 700, letterSpacing: "1px", textShadow: "0 1px 3px rgba(0,0,0,0.8)"
+          }}>
+            CAM-01 • {new Date().toLocaleDateString()}
+          </div>
+          <img
+            src={getMediaURL(question.media_url)}
+            alt={question.video_description || "Driving scenario footage"}
+            loading="eager"
+            style={{
+              width: "100%", height: "100%", objectFit: "cover", display: "block",
+              animation: "dashcam 4s ease-in-out infinite alternate",
+            }}
           />
         </div>
       )}
