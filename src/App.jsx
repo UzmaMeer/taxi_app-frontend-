@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import LandingPage from "./pages/LandingPage";
 import SignUp from "./pages/SignUp";
@@ -24,6 +24,36 @@ function GuestRoute({ children }) {
 }
 
 function AppRoutes() {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Save current page to localStorage so we can restore after refresh
+  useEffect(() => {
+    try {
+      if (user) {
+        localStorage.setItem("driveiq_last_page", location.pathname);
+      } else {
+        localStorage.setItem("driveiq_last_page_guest", location.pathname);
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [location.pathname, user]);
+
+  // On initial load, if user is authenticated and is at root, redirect to last page
+  useEffect(() => {
+    if (loading) return;
+    try {
+      const last = localStorage.getItem("driveiq_last_page") || localStorage.getItem("driveiq_last_page_guest");
+      if (user && last && location.pathname === "/") {
+        navigate(last, { replace: true });
+      }
+    } catch (e) {
+      // ignore
+    }
+  }, [loading, user, location.pathname, navigate]);
+
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
