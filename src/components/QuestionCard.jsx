@@ -45,7 +45,7 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         <div className="video-frame" style={{ marginBottom: 24 }}>
           <div className="video-overlay"><div className="rec"></div> REC</div>
           <video 
-            src={getMediaURL(question.media_url)} 
+            src={`${getMediaURL(question.media_url)}?v=1.0.2`} 
             autoPlay 
             loop 
             muted 
