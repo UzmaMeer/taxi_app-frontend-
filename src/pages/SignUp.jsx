@@ -52,6 +52,11 @@ export default function SignUp() {
         {/* Right panel - form */}
         <div style={{ flex: 1, padding: "clamp(28px, 5vw, 48px)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 28 }}>
+            <button onClick={() => nav("/")} type="button" style={{
+              width: 36, height: 36, borderRadius: 10, background: "#eef0fa", border: "1.5px solid #c7cce6",
+              display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+              fontSize: 16, color: "#1a1f71", fontWeight: 800, transition: "all 0.2s"
+            }}>←</button>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: "#1a1f71", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>🚗</div>
             <span style={{ fontWeight: 800, fontSize: "1.1rem", color: "#1a1f71" }}>DriveIQ</span>
           </div>

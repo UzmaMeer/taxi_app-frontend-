@@ -92,6 +92,11 @@ export default function TestSession() {
       {/* ── Navbar ── */}
       <div className="anim-in" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <button onClick={() => nav("/dashboard")} type="button" style={{
+            width: 36, height: 36, borderRadius: 10, background: "#eef0fa", border: "1.5px solid #c7cce6",
+            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+            fontSize: 16, color: "#1a1f71", fontWeight: 800, transition: "all 0.2s"
+          }}>←</button>
           <div style={{ width: 32, height: 32, borderRadius: 10, background: "#1a1f71", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🚗</div>
           <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "#1a1f71" }}>DriveIQ</span>
         </div>

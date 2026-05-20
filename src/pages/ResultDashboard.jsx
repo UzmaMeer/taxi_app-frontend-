@@ -518,11 +518,16 @@ export default function ResultDashboard() {
         borderBottom: "1px solid #e8ecf2",
         position: "sticky", top: 0, zIndex: 100
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }} onClick={() => nav("/dashboard")}>
-          <div style={{ cursor: "pointer", fontSize: 20, color: "#1a1f71", display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <button onClick={() => nav("/dashboard")} type="button" style={{
+            width: 36, height: 36, borderRadius: 10, background: "#eef0fa", border: "1.5px solid #c7cce6",
+            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
+            fontSize: 16, color: "#1a1f71", fontWeight: 800, transition: "all 0.2s"
+          }}>←</button>
+          <div style={{ cursor: "pointer", fontSize: 20, color: "#1a1f71", display: "flex", alignItems: "center" }} onClick={() => nav("/dashboard")}>
             🚗
           </div>
-          <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "#1a1f71", cursor: "pointer" }}>DriveIQ</span>
+          <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "#1a1f71", cursor: "pointer" }} onClick={() => nav("/dashboard")}>DriveIQ</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#1a1f71", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "0.65rem", fontWeight: 800 }}>
