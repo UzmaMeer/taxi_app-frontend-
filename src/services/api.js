@@ -1,7 +1,8 @@
 import axios from "axios";
 
-// Use VITE_API_URL for production (Vercel), fallback to '/api' for local Vite proxy
-const baseURL = import.meta.env.VITE_API_URL || "/api";
+// Use VITE_API_URL for production (Vercel), fallback to Railway URL in production/vercel, or '/api' for local proxy
+const fallbackURL = "https://taxi-driver-backend-production.up.railway.app/api";
+const baseURL = import.meta.env.VITE_API_URL || fallbackURL;
 const api = axios.create({ baseURL, timeout: 15000 });
 
 // Helper to resolve media URLs dynamically
@@ -9,7 +10,7 @@ export const getMediaURL = (path) => {
   if (!path) return "";
   if (path.startsWith("http")) return path;
   
-  const apiURL = import.meta.env.VITE_API_URL;
+  const apiURL = import.meta.env.VITE_API_URL || fallbackURL;
   if (apiURL) {
     const base = apiURL.replace(/\/api$/, "");
     return `${base}${path}`;
