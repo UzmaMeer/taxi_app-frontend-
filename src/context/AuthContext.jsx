@@ -1,10 +1,12 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { fetchAllMCQs } from "../services/api";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [mcqsPreloaded, setMcqsPreloaded] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("driveiq_user");
@@ -14,9 +16,30 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  const login = (userData) => {
+  useEffect(() => {
+    // If a user session is restored and MCQs are not cached, preload them
+    const cached = localStorage.getItem("driveiq_mcqs_cache");
+    if (user && !cached) {
+      preloadMCQs();
+    }
+  }, [user]);
+
+  const preloadMCQs = async () => {
+    try {
+      const q = await fetchAllMCQs();
+      if (q && Array.isArray(q)) setMcqsPreloaded(true);
+      return q;
+    } catch (err) {
+      console.error("preloadMCQs failed", err);
+      return null;
+    }
+  };
+
+  const login = async (userData) => {
     setUser(userData);
     localStorage.setItem("driveiq_user", JSON.stringify(userData));
+    // Preload MCQs immediately after login to avoid delay when user starts test
+    await preloadMCQs();
   };
 
   const logout = () => {
@@ -25,7 +48,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, preloadMCQs, mcqsPreloaded }}>
       {children}
     </AuthContext.Provider>
   );

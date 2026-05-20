@@ -19,7 +19,7 @@ export default function SignIn() {
     setBusy(true);
     try {
       const res = await loginUser(form.email, form.password);
-      login(res.user);
+      await login(res.user);
       nav("/dashboard");
     } catch (e) {
       setErr(e.response?.data?.detail || "Login failed");

@@ -31,7 +31,19 @@ export async function loginUser(email, password) {
 
 /* ─── MCQs ─── */
 export async function fetchAllMCQs() {
+  // Return cached MCQs if available to avoid network delay
+  const cached = localStorage.getItem("driveiq_mcqs_cache");
+  if (cached) {
+    try {
+      const parsed = JSON.parse(cached);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch (err) {
+      console.error("Invalid MCQ cache, fetching fresh data");
+    }
+  }
+
   const { data } = await api.get("/mcqs/all");
+  try { localStorage.setItem("driveiq_mcqs_cache", JSON.stringify(data)); } catch (e) { /* ignore */ }
   return data;
 }
 
