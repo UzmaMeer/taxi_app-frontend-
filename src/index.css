@@ -264,6 +264,13 @@ h1, h2, h3, h4, h5, h6 {
   color: #1a1f71 !important;
 }
 
+/* Headings placed on a dark/navy background (e.g. gradient hero cards) need to stay
+   white — otherwise the navy-forcing rule above makes them invisible against navy. */
+h1.heading-on-dark, h2.heading-on-dark, h3.heading-on-dark,
+h4.heading-on-dark, h5.heading-on-dark, h6.heading-on-dark {
+  color: #ffffff !important;
+}
+
 /* Override hardcoded dark-mode text colors to navy/dark for clean white theme */
 span[style*="color: #f8fafc"], div[style*="color: #f8fafc"], p[style*="color: #f8fafc"] {
   color: #1a1f71 !important;

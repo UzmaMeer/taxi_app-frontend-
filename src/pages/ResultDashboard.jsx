@@ -312,7 +312,7 @@ export default function ResultDashboard() {
           background: "linear-gradient(135deg, #1a1f71 0%, #343b8a 100%)",
           color: "#ffffff", border: "none", position: "relative", overflow: "hidden"
         }}>
-          <h2 style={{ fontSize: "1.4rem", fontWeight: 900, marginBottom: 6 }}>DriveIQ Practice Center</h2>
+          <h2 className="heading-on-dark" style={{ fontSize: "1.4rem", fontWeight: 900, marginBottom: 6 }}>DriveIQ Practice Center</h2>
           <p style={{ fontSize: "0.85rem", opacity: 0.85, lineHeight: 1.5, maxWidth: 450, marginBottom: 18 }}>
             Hone your driving judgment, perception, and psychology using our mock training drills. Keep your score above 80% to maintain gold shift eligibility!
           </p>

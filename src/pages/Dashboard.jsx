@@ -202,7 +202,7 @@ export default function Dashboard() {
           padding: "24px 20px", background: "linear-gradient(135deg, #1a1f71 0%, #2a3182 100%)",
           color: "#ffffff", borderRadius: 20, border: "none", textAlign: "center"
         }}>
-          <h3 style={{ fontSize: "1.2rem", fontWeight: 800, marginBottom: 6 }}>🧪 Unified Theory Assessment</h3>
+          <h3 className="heading-on-dark" style={{ fontSize: "1.2rem", fontWeight: 800, marginBottom: 6 }}>🧪 Unified Theory Assessment</h3>
           <p style={{ opacity: 0.85, fontSize: "0.82rem", lineHeight: 1.5, maxWidth: 460, margin: "0 auto 16px" }}>
             Take the complete 20-question multi-media exam covering driving judgment, perception, hazard reactive drills, and psychometrics.
           </p>
@@ -233,7 +233,7 @@ export default function Dashboard() {
           background: "linear-gradient(135deg, #1a1f71 0%, #343b8a 100%)",
           color: "#ffffff", border: "none", position: "relative", overflow: "hidden"
         }}>
-          <h2 style={{ fontSize: "1.4rem", fontWeight: 900, marginBottom: 6 }}>DriveIQ Practice Center</h2>
+          <h2 className="heading-on-dark" style={{ fontSize: "1.4rem", fontWeight: 900, marginBottom: 6 }}>DriveIQ Practice Center</h2>
           <p style={{ fontSize: "0.85rem", opacity: 0.85, lineHeight: 1.5, maxWidth: 450, marginBottom: 18 }}>
             Hone your driving judgment, perception, and psychology using our mock training drills. Keep your score above 80% to maintain gold shift eligibility!
           </p>
