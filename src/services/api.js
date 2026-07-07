@@ -3,7 +3,8 @@ import axios from "axios";
 // Use VITE_API_URL for production (Vercel), fallback to '/api' for local proxy
 const fallbackURL = "/api";
 const baseURL = import.meta.env.VITE_API_URL || fallbackURL;
-const api = axios.create({ baseURL, timeout: 15000 });
+// 60s — Render's free tier spins down after inactivity and can take 30-50s to cold-start
+const api = axios.create({ baseURL, timeout: 60000 });
 
 // Helper to resolve media URLs dynamically
 export const getMediaURL = (path) => {
