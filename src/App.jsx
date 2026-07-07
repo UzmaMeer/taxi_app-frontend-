@@ -6,6 +6,7 @@ import SignIn from "./pages/SignIn";
 import Dashboard from "./pages/Dashboard";
 import TestSession from "./pages/TestSession";
 import ResultDashboard from "./pages/ResultDashboard";
+import FocusCheck, { FOCUS_CHECK_SESSION_KEY } from "./pages/FocusCheck";
 import { useEffect } from "react";
 import { fetchAllMCQs, getMediaURL } from "./services/api";
 
@@ -22,6 +23,22 @@ function GuestRoute({ children }) {
   if (user) return <Navigate to="/dashboard" replace />;
   return children;
 }
+
+// Sign in / sign up require a completed pre-login Focus Check first (per session).
+function FocusGateRoute({ children }) {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  if (user) return <Navigate to="/dashboard" replace />;
+  let done = false;
+  try {
+    done = sessionStorage.getItem(FOCUS_CHECK_SESSION_KEY) === "1";
+  } catch (e) {
+    // ignore
+  }
+  if (!done) return <Navigate to="/focus-check" replace />;
+  return children;
+}
+
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -57,8 +74,9 @@ function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/signup" element={<GuestRoute><SignUp /></GuestRoute>} />
-      <Route path="/signin" element={<GuestRoute><SignIn /></GuestRoute>} />
+      <Route path="/focus-check" element={<GuestRoute><FocusCheck /></GuestRoute>} />
+      <Route path="/signup" element={<FocusGateRoute><SignUp /></FocusGateRoute>} />
+      <Route path="/signin" element={<FocusGateRoute><SignIn /></FocusGateRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/test" element={<ProtectedRoute><TestSession /></ProtectedRoute>} />
       <Route path="/result" element={<ProtectedRoute><ResultDashboard /></ProtectedRoute>} />

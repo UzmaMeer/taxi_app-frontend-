@@ -3,34 +3,76 @@ import { getMediaURL } from "../services/api";
 
 const LABELS = ["1", "2", "3", "4", "5", "6"];
 
-export default function QuestionCard({ question, selectedAnswer, onSelect }) {
+// gTTS has no native speaking-rate control, so narration is nudged slightly faster at
+// playback time instead — a modest bump that shortens listening time while staying clear
+// (modern browsers preserve pitch by default, so it doesn't sound sped-up/chipmunked).
+const NARRATION_PLAYBACK_RATE = 1.15;
+
+function applyNarrationRate(el) {
+  if (!el) return;
+  el.playbackRate = NARRATION_PLAYBACK_RATE;
+  // Older WebKit/Firefox builds expose pitch-preservation behind prefixed flags;
+  // modern browsers default this to true, but set it explicitly for safety.
+  el.preservesPitch = true;
+  el.mozPreservesPitch = true;
+  el.webkitPreservesPitch = true;
+}
+
+function AudioZone({ src, label }) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef(null);
 
   const toggle = () => {
     if (!audioRef.current) return;
-    playing ? audioRef.current.pause() : audioRef.current.play().catch(() => {});
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      applyNarrationRate(audioRef.current);
+      audioRef.current.play().catch(() => {});
+    }
   };
 
+  const replay = () => {
+    if (!audioRef.current) return;
+    applyNarrationRate(audioRef.current);
+    audioRef.current.currentTime = 0;
+    audioRef.current.play().catch(() => {});
+  };
+
+  return (
+    <div className="audio-zone" style={{ marginBottom: 24 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+        <button className={`play-circle ${playing ? "on" : ""}`} onClick={toggle} type="button" aria-label={playing ? "Pause" : "Play"}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff">
+            {playing
+              ? <><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></>
+              : <polygon points="6,3 20,12 6,21"/>}
+          </svg>
+        </button>
+        <button onClick={replay} type="button" aria-label="Replay" title="Replay from start" style={{
+          width: 36, height: 36, borderRadius: "50%", border: "1.5px solid #d1d5e4", background: "#fff",
+          color: "#1a1f71", fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center",
+        }}>
+          ↺
+        </button>
+      </div>
+      <p style={{ color: "#64748b", fontSize: "0.85rem", fontWeight: 500 }}>{label}</p>
+      <audio ref={audioRef} src={getMediaURL(src)}
+        onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
+        onLoadedMetadata={(e) => applyNarrationRate(e.currentTarget)}
+        controls style={{ width: "100%", maxWidth: 400, height: 40 }}
+      />
+    </div>
+  );
+}
+
+export default function QuestionCard({ question, selectedAnswer, onSelect }) {
   return (
     <div className="card" style={{ padding: "clamp(24px, 4vw, 36px)", overflow: "hidden" }}>
 
       {/* ── Audio ── */}
       {question.category === "audio" && question.media_url && (
-        <div className="audio-zone" style={{ marginBottom: 24 }}>
-          <button className={`play-circle ${playing ? "on" : ""}`} onClick={toggle} type="button">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff">
-              {playing
-                ? <><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></>
-                : <polygon points="6,3 20,12 6,21"/>}
-            </svg>
-          </button>
-          <p style={{ color: "#64748b", fontSize: "0.85rem", fontWeight: 500 }}>🎧 Listen to the question, then select your answer</p>
-          <audio ref={audioRef} src={getMediaURL(question.media_url)}
-            onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)}
-            controls style={{ width: "100%", maxWidth: 400, height: 40 }}
-          />
-        </div>
+        <AudioZone src={question.media_url} label="🎧 Listen to the question, then select your answer" />
       )}
 
       {/* ── Image ── */}
@@ -38,6 +80,11 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         <div className="img-frame" style={{ marginBottom: 24 }}>
           <img src={getMediaURL(question.media_url)} alt="Driving scenario" loading="eager" />
         </div>
+      )}
+
+      {/* ── Image scenario narration (optional) ── */}
+      {question.category === "image" && question.audio_url && (
+        <AudioZone src={question.audio_url} label="🎧 Listen to the scenario narration, then select your answer" />
       )}
 
       {/* ── Video (Dashcam Footage Simulation) ── */}

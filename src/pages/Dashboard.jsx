@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { fetchUserHistory, fetchLatestResult } from "../services/api";
+import { fetchUserHistory, fetchLatestResult, fetchAllMCQs } from "../services/api";
 
 const CATEGORIES = [
   {
@@ -35,11 +35,14 @@ const QUICK_STATS = [
 
 export default function Dashboard() {
   const nav = useNavigate();
+  const location = useLocation();
   const { user, logout } = useAuth();
 
-  const [activeTab, setActiveTab] = useState("tests");
+  const [activeTab, setActiveTab] = useState(location.state?.activeTab || "tests");
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const [history, setHistory] = useState([]);
   const [latestResult, setLatestResult] = useState(null);
+  const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const greetHour = new Date().getHours();
@@ -51,16 +54,50 @@ export default function Dashboard() {
     
     Promise.all([
       fetchUserHistory(user.full_name),
-      fetchLatestResult(user.full_name)
-    ]).then(([histData, latestData]) => {
+      fetchLatestResult(user.full_name),
+      fetchAllMCQs()
+    ]).then(([histData, latestData, mcqData]) => {
       setHistory(histData || []);
       setLatestResult(latestData);
+      setQuestions(mcqData || []);
       setLoading(false);
     }).catch(err => {
       console.error("Failed prefetching dashboard data", err);
       setLoading(false);
     });
   }, [user]);
+
+  const totalQuestions = questions.length || 20;
+
+  const dynamicQuickStats = [
+    { icon: "📋", value: String(totalQuestions), label: "Total Questions" },
+    { icon: "⏱️", value: `${Math.ceil(totalQuestions * 36 / 60)} min`, label: "Time Limit" },
+    { icon: "⚡", value: "< 1 sec", label: "API Speed" },
+    { icon: "🏆", value: "Instant", label: "Results" },
+  ];
+
+  const dynamicCategories = [
+    {
+      key: "text", icon: "📝", title: "Text-Based MCQs", count: questions.filter(q => q.category === "text").length || 5,
+      desc: "Scenario-driven questions evaluating decision-making in real driving situations.",
+      bg: "#eef0fa", border: "#c7cce6", tag: "Cognitive",
+    },
+    {
+      key: "audio", icon: "🎧", title: "Audio-Based MCQs", count: questions.filter(q => q.category === "audio").length || 5,
+      desc: "Listen to realistic driving scenarios and choose the safest course of action.",
+      bg: "#eef0fa", border: "#c7cce6", tag: "Perception",
+    },
+    {
+      key: "image", icon: "🖼️", title: "Image Psychometrics", count: questions.filter(q => q.category === "image").length || 5,
+      desc: "Analyze visual driving scenes to evaluate psychological response and empathy.",
+      bg: "#eef0fa", border: "#c7cce6", tag: "Emotional",
+    },
+    {
+      key: "video", icon: "🎬", title: "Video Scenarios", count: questions.filter(q => q.category === "video").length || 5,
+      desc: "Watch dynamic video clips of road hazards to test real-time reaction.",
+      bg: "#eef0fa", border: "#c7cce6", tag: "Reactive",
+    },
+  ];
 
   /* ─────────────────────── RENDER TESTS TAB ─────────────────────── */
   const renderTestsTab = () => {
@@ -105,7 +142,7 @@ export default function Dashboard() {
           gap: 10, padding: "14px", marginBottom: 28, borderRadius: 18,
           background: "#ffffff", border: "1px solid #e8ecf2",
         }}>
-          {QUICK_STATS.map((s, i) => (
+          {dynamicQuickStats.map((s, i) => (
             <div key={i} style={{
               textAlign: "center",
               borderRight: i < 3 ? "1px solid #e8ecf2" : "none",
@@ -128,7 +165,7 @@ export default function Dashboard() {
 
         {/* Categories List */}
         <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 28 }}>
-          {CATEGORIES.map((c, i) => (
+          {dynamicCategories.map((c, i) => (
             <div key={i} className="card card-hover" 
               onClick={() => nav("/test", { state: { startCategory: c.key } })}
               style={{
@@ -413,6 +450,7 @@ export default function Dashboard() {
           </div>
         </div>
 
+
         {/* Logout button */}
         <button onClick={logout} className="btn-outline" style={{
           width: "100%", padding: "15px", borderRadius: 14, color: "#ef4444", border: "2px solid #fecaca", fontWeight: 800
@@ -424,88 +462,198 @@ export default function Dashboard() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#f7f8fc" }}>
-      {/* ── Navbar ── */}
-      <nav style={{
-        padding: "16px 24px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        background: "#ffffff",
-        borderBottom: "1px solid #e8ecf2",
-        position: "sticky", top: 0, zIndex: 100
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }} onClick={() => setActiveTab("tests")}>
-          <div style={{ cursor: "pointer", fontSize: 20, color: "#1a1f71", display: "flex", alignItems: "center" }}>
-            🚗
-          </div>
-          <span style={{ fontSize: "1.2rem", fontWeight: 800, color: "#1a1f71", cursor: "pointer" }}>DriveIQ</span>
-        </div>
+    <div className="test-layout">
+      {/* MOBILE HEADER BAR */}
+      <header style={{
+        display: "none",
+        position: "fixed", top: 0, left: 0, right: 0, height: 60,
+        background: "#ffffff", borderBottom: "1px solid #e8ecf2",
+        alignItems: "center", justifyContent: "space-between", padding: "0 20px",
+        zIndex: 90, boxShadow: "0 2px 8px rgba(0,0,0,0.02)"
+      }} className="mobile-header-bar">
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#1a1f71", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "0.65rem", fontWeight: 800 }}>
+          <span style={{ fontSize: 20 }}>🚗</span>
+          <span style={{ fontSize: "1rem", fontWeight: 800, color: "#1a1f71" }}>DriveIQ Dashboard</span>
+        </div>
+        <button 
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{
+            background: "none", border: "none", fontSize: "1.5rem",
+            color: "#1a1f71", cursor: "pointer", display: "flex", alignItems: "center"
+          }}
+          title="Toggle Sidebar"
+        >
+          ☰
+        </button>
+      </header>
+
+      {/* PERSISTENT SIDEBAR */}
+      <aside className={`test-sidebar ${sidebarOpen ? "open" : ""}`}>
+        {/* Close button on mobile sidebar */}
+        <div style={{
+          position: "absolute", top: 16, right: 16, display: "none", 
+          cursor: "pointer", fontSize: "1.4rem", color: "#cbd5e1"
+        }} className="sidebar-close-btn" onClick={() => setSidebarOpen(false)}>
+          ×
+        </div>
+
+        <div className="test-sidebar-header" style={{ justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontSize: 24 }}>🚗</span>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontSize: "1.15rem", fontWeight: 900, color: "#f5c518", letterSpacing: "0.5px" }}>DriveIQ</span>
+              <span style={{ fontSize: "0.68rem", color: "#cbd5e1", fontWeight: 700, textTransform: "uppercase" }}>Driver Console</span>
+            </div>
+          </div>
+          <button 
+            onClick={() => setSidebarOpen(false)}
+            style={{
+              background: "none", border: "none", color: "#cbd5e1", fontSize: "1.2rem", cursor: "pointer",
+              padding: 4, display: "flex", alignItems: "center"
+            }}
+            className="sidebar-collapse-btn-desktop"
+            title="Collapse Sidebar"
+          >
+            ◀
+          </button>
+        </div>
+
+        {/* Driver profile details */}
+        <div 
+          className="test-sidebar-profile"
+          onClick={() => { setActiveTab("profile"); setSidebarOpen(window.innerWidth > 768); }}
+        >
+          <div className="test-sidebar-avatar">
             {user?.full_name?.charAt(0)?.toUpperCase() || "D"}
           </div>
-          <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#1a1f71" }}>{user?.full_name}</span>
+          <div style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+            <h4 style={{ fontSize: "0.88rem", fontWeight: 800, color: "#ffffff", marginBottom: 2 }}>{user?.full_name || "Driver"}</h4>
+            <p style={{ fontSize: "0.72rem", color: "#cbd5e1", marginBottom: 6, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{user?.email}</p>
+            <span style={{ fontSize: "0.62rem", background: "rgba(245, 197, 24, 0.15)", color: "#f5c518", padding: "2px 8px", borderRadius: 4, fontWeight: 800 }}>
+              📋 DRIVER PROFILE
+            </span>
+          </div>
         </div>
-      </nav>
 
-      {/* Main Container */}
-      <div style={{ maxWidth: 640, margin: "0 auto", padding: "24px 20px 100px" }}>
-        {activeTab === "tests" && renderTestsTab()}
-        {activeTab === "practice" && renderPracticeTab()}
-        {activeTab === "history" && renderHistoryTab()}
-        {activeTab === "profile" && renderProfileTab()}
-      </div>
+        {/* Sidebar Navigation Options */}
+        <div className="test-sidebar-menu">
+          <button 
+            className={`test-sidebar-item ${activeTab === "tests" ? "active" : ""}`}
+            onClick={() => { setActiveTab("tests"); setSidebarOpen(window.innerWidth > 768); }}
+          >
+            <span>📋</span>
+            <span>Theory Tests</span>
+          </button>
 
-      {/* ── Bottom Navigation Tabs (Dynamic State Switcher) ── */}
-      <div style={{
-        position: "fixed", bottom: 0, left: 0, right: 0, height: 68,
-        background: "#ffffff", borderTop: "1px solid #e8ecf2",
-        display: "flex", justifyContent: "space-around", alignItems: "center",
-        zIndex: 100, boxShadow: "0 -4px 16px rgba(0, 0, 0, 0.05)"
-      }}>
-        <button onClick={() => setActiveTab("tests")} style={{
-          background: activeTab === "tests" ? "#f5c518" : "none",
-          color: activeTab === "tests" ? "#1a1f71" : "#94a3b8",
-          border: "none", padding: "6px 16px", borderRadius: 12, fontWeight: 800, fontSize: "0.75rem",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 2, cursor: "pointer",
-          transition: "all 0.2s"
-        }}>
-          <span>📋</span>
-          <span>Tests</span>
-        </button>
+          {/* Sub-menu categories under Theory Tests */}
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+            paddingLeft: 20,
+            marginTop: -2,
+            marginBottom: 10,
+            borderLeft: "2px solid rgba(255, 255, 255, 0.15)",
+            marginLeft: 26
+          }} className="anim-down">
+            {[
+              { id: "text", label: "Text Based", icon: "📝" },
+              { id: "audio", label: "Audio TTS", icon: "🎧" },
+              { id: "image", label: "Image Psych", icon: "🖼️" },
+              { id: "video", label: "Video GIF", icon: "🎬" }
+            ].map(cat => (
+              <button
+                key={cat.id}
+                onClick={() => {
+                  setSidebarOpen(window.innerWidth > 768);
+                  nav("/test", { state: { startCategory: cat.id } });
+                }}
+                className="test-sidebar-item"
+                style={{
+                  padding: "8px 12px",
+                  fontSize: "0.8rem",
+                  borderRadius: 6
+                }}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.label}</span>
+              </button>
+            ))}
+          </div>
 
-        <button onClick={() => setActiveTab("practice")} style={{
-          background: activeTab === "practice" ? "#f5c518" : "none",
-          color: activeTab === "practice" ? "#1a1f71" : "#94a3b8",
-          border: "none", padding: "6px 16px", borderRadius: 12, fontWeight: 800, fontSize: "0.75rem",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 2, cursor: "pointer",
-          transition: "all 0.2s"
-        }}>
-          <span>📖</span>
-          <span>Practice</span>
-        </button>
+          <button 
+            className={`test-sidebar-item ${activeTab === "practice" ? "active" : ""}`}
+            onClick={() => { setActiveTab("practice"); setSidebarOpen(window.innerWidth > 768); }}
+          >
+            <span>📖</span>
+            <span>Training Mock Modules</span>
+          </button>
 
-        <button onClick={() => setActiveTab("history")} style={{
-          background: activeTab === "history" ? "#f5c518" : "none",
-          color: activeTab === "history" ? "#1a1f71" : "#94a3b8",
-          border: "none", padding: "6px 16px", borderRadius: 12, fontWeight: 800, fontSize: "0.75rem",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 2, cursor: "pointer",
-          transition: "all 0.2s"
-        }}>
-          <span>⏱️</span>
-          <span>History</span>
-        </button>
+          <button 
+            className={`test-sidebar-item ${activeTab === "history" ? "active" : ""}`}
+            onClick={() => { setActiveTab("history"); setSidebarOpen(window.innerWidth > 768); }}
+          >
+            <span>⏱️</span>
+            <span>Assessment Log History</span>
+          </button>
 
-        <button onClick={() => setActiveTab("profile")} style={{
-          background: activeTab === "profile" ? "#f5c518" : "none",
-          color: activeTab === "profile" ? "#1a1f71" : "#94a3b8",
-          border: "none", padding: "6px 16px", borderRadius: 12, fontWeight: 800, fontSize: "0.75rem",
-          display: "flex", flexDirection: "column", alignItems: "center", gap: 2, cursor: "pointer",
-          transition: "all 0.2s"
-        }}>
-          <span>👤</span>
-          <span>Profile</span>
-        </button>
-      </div>
+          <button 
+            className={`test-sidebar-item ${activeTab === "profile" ? "active" : ""}`}
+            onClick={() => { setActiveTab("profile"); setSidebarOpen(window.innerWidth > 768); }}
+          >
+            <span>👤</span>
+            <span>Profile Settings</span>
+          </button>
+        </div>
+
+        {/* Footer actions */}
+        <div style={{ padding: 16, borderTop: "1px solid #1e293b" }}>
+          <button 
+            className="test-exit-btn" 
+            onClick={logout} 
+            style={{ color: "#fca5a5 !important" }}
+          >
+            <span>🚪</span>
+            <span>Sign Out of DriveIQ</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div 
+          onClick={() => setSidebarOpen(false)}
+          className="mobile-sidebar-backdrop"
+          style={{ position: "fixed", top: 0, bottom: 0, left: 0, right: 0, background: "rgba(15, 23, 42, 0.4)", zIndex: 99 }}
+        />
+      )}
+
+      {/* MAIN CONTENT DISPLAY */}
+      <main className={`test-content-area ${sidebarOpen ? "sidebar-open" : ""}`}>
+        <div style={{ maxWidth: 640, margin: "0 auto" }}>
+          {/* Desktop Toggle Header */}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }} className="desktop-toggle-header">
+            <button 
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              style={{
+                background: "#ffffff", border: "1.5px solid #e8ecf2", borderRadius: 10,
+                width: 38, height: 38, display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", fontSize: 16, color: "#1a1f71", fontWeight: 800,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.02)"
+              }}
+              title="Toggle Sidebar"
+            >
+              ☰
+            </button>
+            <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "#1a1f71" }}>DriveIQ Dashboard Navigation</span>
+          </div>
+
+          {activeTab === "tests" && renderTestsTab()}
+          {activeTab === "practice" && renderPracticeTab()}
+          {activeTab === "history" && renderHistoryTab()}
+          {activeTab === "profile" && renderProfileTab()}
+        </div>
+      </main>
     </div>
   );
 }

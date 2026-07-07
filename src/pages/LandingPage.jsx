@@ -27,7 +27,7 @@ export default function LandingPage() {
   const nav = useNavigate();
   const { user } = useAuth();
   const [hovered, setHovered] = useState(null);
-  const go = user ? "/dashboard" : "/signup";
+  const go = user ? "/dashboard" : "/focus-check";
 
   const words = ["Intelligent", "Reliable", "Safe", "Advanced"];
   const [wordIdx, setWordIdx] = useState(0);

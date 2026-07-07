@@ -335,3 +335,214 @@ input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focu
   .mcq-opt { padding: 14px 16px; font-size: 0.9rem; }
   .mcq-opt .letter { width: 34px; height: 34px; font-size: 0.78rem; }
 }
+
+/* ─── Sidebar Layout matching Admin Style ─── */
+.test-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f7f8fc;
+}
+
+.test-sidebar {
+  width: 280px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e1b4b 100%) !important;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  box-shadow: 4px 0 24px rgba(15, 23, 42, 0.15);
+  transform: translateX(-100%);
+}
+
+.test-sidebar.open {
+  transform: translateX(0);
+}
+
+.test-sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.test-sidebar-profile {
+  padding: 24px;
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.test-sidebar-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f5c518 0%, #d97706 100%);
+  color: #1e1b4b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.test-sidebar-menu {
+  flex: 1;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.test-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: #cbd5e1 !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.test-sidebar-item:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.test-sidebar-item.active {
+  background: #f5c518 !important;
+  color: #1e1b4b !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 12px rgba(245, 197, 24, 0.25);
+}
+
+.test-sidebar-item.active span {
+  color: #1e1b4b !important;
+}
+
+.test-sidebar-profile {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.test-sidebar-profile:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.test-exit-btn {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s ease;
+}
+
+.test-exit-btn:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.test-submit-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: #f5c518;
+  border: none;
+  color: #1e1b4b;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(245, 197, 24, 0.25);
+}
+
+.test-submit-btn:hover:not(:disabled) {
+  background: #f6d03d !important;
+  box-shadow: 0 6px 16px rgba(245, 197, 24, 0.35);
+}
+
+.test-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mobile-sidebar-backdrop {
+  display: none !important;
+}
+
+.test-content-area {
+  margin-left: 0;
+  flex: 1;
+  padding: 40px 24px 80px;
+  background: #f7f8fc;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+.test-content-area.sidebar-open {
+  margin-left: 280px;
+}
+
+.desktop-toggle-header {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-collapse-btn-desktop {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .test-sidebar {
+    transform: translateX(-100%);
+    width: 80vw;
+    max-width: 280px;
+  }
+  .test-sidebar.open {
+    transform: translateX(0);
+  }
+  .test-content-area {
+    margin-left: 0;
+    padding: 20px 16px 80px;
+    margin-top: 60px;
+  }
+  .test-content-area.sidebar-open {
+    margin-left: 0 !important;
+  }
+  .mobile-header-bar {
+    display: flex !important;
+  }
+  .sidebar-close-btn {
+    display: block !important;
+  }
+  .desktop-toggle-header {
+    display: none !important;
+  }
+  .sidebar-collapse-btn-desktop {
+    display: none !important;
+  }
+  .mobile-sidebar-backdrop {
+    display: block !important;
+  }
+}
+

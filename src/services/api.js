@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// Use VITE_API_URL for production (Vercel), fallback to Railway URL in production/vercel, or '/api' for local proxy
-const fallbackURL = "https://taxi-driver-backend-production.up.railway.app/api";
+// Use VITE_API_URL for production (Vercel), fallback to '/api' for local proxy
+const fallbackURL = "/api";
 const baseURL = import.meta.env.VITE_API_URL || fallbackURL;
 const api = axios.create({ baseURL, timeout: 15000 });
 
@@ -31,20 +31,33 @@ export async function loginUser(email, password) {
 
 /* ─── MCQs ─── */
 export async function fetchAllMCQs() {
-  // Return cached MCQs if available to avoid network delay
-  const cached = localStorage.getItem("driveiq_mcqs_cache");
-  if (cached) {
+  try {
+    // Always fetch fresh data from the backend (never serve stale cache as primary)
+    const { data } = await api.get("/mcqs/all");
+    // After a successful fetch, clear any old cache so it never gets served as stale
     try {
-      const parsed = JSON.parse(cached);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    } catch (err) {
-      console.error("Invalid MCQ cache, fetching fresh data");
+      localStorage.removeItem("driveiq_mcqs_cache");
+    } catch (e) {
+      // ignore
     }
+    return data;
+  } catch (err) {
+    // ONLY use cache as fallback when genuinely offline / backend is down
+    console.warn("[DriveIQ] Backend unreachable — falling back to cached MCQs:", err?.message);
+    const cached = localStorage.getItem("driveiq_mcqs_cache");
+    if (cached) {
+      try {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          console.warn("[DriveIQ] Serving", parsed.length, "MCQs from offline cache.");
+          return parsed;
+        }
+      } catch (e) {
+        // ignore malformed cache
+      }
+    }
+    throw err;
   }
-
-  const { data } = await api.get("/mcqs/all");
-  try { localStorage.setItem("driveiq_mcqs_cache", JSON.stringify(data)); } catch (e) { /* ignore */ }
-  return data;
 }
 
 export async function fetchMCQsByCategory(category) {
@@ -75,5 +88,73 @@ export async function fetchLatestResult(userName) {
     return null;
   }
 }
+
+/* ─── Admin API Calls ─── */
+export async function adminFetchAllMCQs(token) {
+  const { data } = await api.get("/admin/mcqs", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+}
+
+export async function adminCreateMCQ(mcqData, token) {
+  const { data } = await api.post("/admin/mcqs", mcqData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+}
+
+export async function adminUpdateMCQ(category, id, mcqData, token) {
+  const { data } = await api.put(`/admin/mcqs/${category}/${id}`, mcqData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+}
+
+export async function adminDeleteMCQ(category, id, token) {
+  const { data } = await api.delete(`/admin/mcqs/${category}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+}
+
+export async function adminUploadFile(file, token) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const { data } = await api.post("/admin/upload", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data"
+    }
+  });
+  return data;
+}
+
+export async function adminImportMCQs(file, token) {
+  const formData = new FormData();
+  formData.append("file", file);
+  const { data } = await api.post("/admin/mcqs/import", formData, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data"
+    }
+  });
+  return data;
+}
+
+export async function adminFetchResults(token) {
+  const { data } = await api.get("/admin/results", {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+}
+
+export async function adminDeleteResult(resultId, token) {
+  const { data } = await api.delete(`/admin/results/${resultId}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  return data;
+}
+
 
 
