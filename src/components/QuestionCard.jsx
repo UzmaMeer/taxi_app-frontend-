@@ -150,13 +150,22 @@ export default function QuestionCard({ question, selectedAnswer, onSelect, autoP
         </div>
       )}
 
-      {/* ── Question — hidden as text for Audio MCQs; listening to it is the point of the test ── */}
+      {/* ── Question — hidden as text for Audio and Image MCQs; the media itself is the question ── */}
       {question.category === "audio" ? (
         <h2 style={{
           fontSize: "clamp(1rem, 2.2vw, 1.2rem)", fontWeight: 700,
           lineHeight: 1.6, marginBottom: 24, color: "#94a3b8", fontStyle: "italic"
         }}>
           🎧 Play the audio above to hear the question
+        </h2>
+      ) : question.category === "image" ? (
+        <h2 style={{
+          fontSize: "clamp(1rem, 2.2vw, 1.2rem)", fontWeight: 700,
+          lineHeight: 1.6, marginBottom: 24, color: "#94a3b8", fontStyle: "italic"
+        }}>
+          🖼️ {question.audio_url
+            ? "Look at the image and listen to the narration above, then select your answer"
+            : "Look at the image above, then select your answer"}
         </h2>
       ) : (
         <h2 style={{
