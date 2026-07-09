@@ -72,7 +72,7 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
 
       {/* ── Audio ── */}
       {question.category === "audio" && question.media_url && (
-        <AudioZone src={question.media_url} label="🎧 Listen to the question, then select your answer" />
+        <AudioZone src={question.media_url} label="▶️ Play to listen to the question" />
       )}
 
       {/* ── Image ── */}
@@ -113,35 +113,16 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
 
 
 
-      {/* ── Stimulus context (reading passage / sign / message the question refers to) ── */}
-      {question.stimulus_text && (
-        <div style={{
-          background: "#e3e7f8", border: "1px solid #c7cce6",
-          borderLeft: "4px solid #1a1f71", borderRadius: "0 14px 14px 0",
-          padding: "13px 18px 15px", marginBottom: 20, boxShadow: "0 2px 8px rgba(26, 31, 113, 0.10)"
-        }}>
-          <div style={{
-            fontSize: "0.7rem", fontWeight: 800, color: "#1a1f71",
-            textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 6
-          }}>
-            📄 Reference Material
-          </div>
-          <p style={{ margin: 0, fontSize: "0.92rem", color: "#1e293b", fontWeight: 600, lineHeight: 1.6 }}>
-            {question.stimulus_text}
-          </p>
-        </div>
-      )}
-
       {/* ── Metadata Tags (Behavioral Category & Difficulty) ── */}
       {(question.difficulty || question.behavioral_category) && (
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 16 }}>
           {question.behavioral_category && (
             <span className="tag tag-audio" style={{ fontSize: "0.68rem", fontWeight: 700 }}>
               🧠 {question.behavioral_category}
             </span>
           )}
           {question.difficulty && (
-            <span className="tag" style={{ 
+            <span className="tag" style={{
               fontSize: "0.68rem",
               fontWeight: 700,
               background: question.difficulty === "Hard" ? "rgba(239, 68, 68, 0.15)" : question.difficulty === "Medium" ? "rgba(245, 158, 11, 0.15)" : "rgba(16, 185, 129, 0.15)",
@@ -153,13 +134,28 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         </div>
       )}
 
-      {/* ── Question ── */}
-      <h2 style={{
-        fontSize: "clamp(1rem, 2.2vw, 1.2rem)", fontWeight: 700,
-        lineHeight: 1.6, marginBottom: 24, color: "#1e293b",
-      }}>
-        {question.question}
-      </h2>
+      {/* ── Question — hidden as text for Audio MCQs; listening to it is the point of the test ── */}
+      {question.category === "audio" ? (
+        <h2 style={{
+          fontSize: "clamp(1rem, 2.2vw, 1.2rem)", fontWeight: 700,
+          lineHeight: 1.6, marginBottom: 24, color: "#94a3b8", fontStyle: "italic"
+        }}>
+          🎧 Play the audio above to hear the question
+        </h2>
+      ) : (
+        <h2 style={{
+          fontSize: "clamp(1rem, 2.2vw, 1.2rem)", fontWeight: 700,
+          lineHeight: 1.6, marginBottom: 24, color: "#1e293b",
+        }}>
+          {question.stimulus_text && (
+            <>
+              <strong style={{ color: "#1a1f71" }}>{question.stimulus_text}</strong>
+              <br />
+            </>
+          )}
+          {question.question}
+        </h2>
+      )}
 
       {/* ── Options ── */}
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

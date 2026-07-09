@@ -652,21 +652,30 @@ export default function ResultDashboard() {
               { id: "audio", label: "Audio TTS", icon: "🎧" },
               { id: "image", label: "Image Psych", icon: "🖼️" },
               { id: "video", label: "Video GIF", icon: "🎬" }
-            ].map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => jumpToCategory(cat.id)}
-                className="test-sidebar-item"
-                style={{
-                  padding: "8px 12px",
-                  fontSize: "0.8rem",
-                  borderRadius: 6
-                }}
-              >
-                <span>{cat.icon}</span>
-                <span>{cat.label}</span>
-              </button>
-            ))}
+            ].map(cat => {
+              const comingSoon = cat.id === "video";
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => { if (!comingSoon) jumpToCategory(cat.id); }}
+                  disabled={comingSoon}
+                  className="test-sidebar-item"
+                  style={{
+                    padding: "8px 12px",
+                    fontSize: "0.8rem",
+                    borderRadius: 6,
+                    opacity: comingSoon ? 0.5 : 1,
+                    cursor: comingSoon ? "not-allowed" : "pointer"
+                  }}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                  {comingSoon && (
+                    <span style={{ fontSize: "0.55rem", fontWeight: 800, color: "#f5c518", marginLeft: 6 }}>SOON</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           <button 

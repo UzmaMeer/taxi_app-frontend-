@@ -165,36 +165,40 @@ export default function Dashboard() {
 
         {/* Categories List */}
         <div style={{ display: "flex", flexDirection: "column", gap: 14, marginBottom: 28 }}>
-          {dynamicCategories.map((c, i) => (
-            <div key={i} className="card card-hover" 
-              onClick={() => nav("/test", { state: { startCategory: c.key } })}
-              style={{
-                padding: "20px 22px", cursor: "pointer", display: "flex", alignItems: "center", justifySelf: "stretch",
-                justifyContent: "space-between", background: "#ffffff", border: "1px solid #e8ecf2", borderRadius: 16
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1 }}>
-                <div style={{
-                  width: 46, height: 46, borderRadius: 12,
-                  background: c.bg, border: `1px solid ${c.border}`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 22,
-                }}>{c.icon}</div>
-                <div>
-                  <h3 style={{ fontSize: "0.98rem", fontWeight: 800, color: "#1a1f71", marginBottom: 3 }}>{c.title}</h3>
-                  <p style={{ fontSize: "0.78rem", color: "#64748b", lineHeight: 1.4 }}>{c.desc}</p>
+          {dynamicCategories.map((c, i) => {
+            const comingSoon = c.key === "video";
+            return (
+              <div key={i} className={`card ${comingSoon ? "" : "card-hover"}`}
+                onClick={() => { if (!comingSoon) nav("/test", { state: { startCategory: c.key } }); }}
+                style={{
+                  padding: "20px 22px", cursor: comingSoon ? "not-allowed" : "pointer", display: "flex", alignItems: "center", justifySelf: "stretch",
+                  justifyContent: "space-between", background: "#ffffff", border: "1px solid #e8ecf2", borderRadius: 16,
+                  opacity: comingSoon ? 0.6 : 1
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 16, flex: 1 }}>
+                  <div style={{
+                    width: 46, height: 46, borderRadius: 12,
+                    background: c.bg, border: `1px solid ${c.border}`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 22,
+                  }}>{c.icon}</div>
+                  <div>
+                    <h3 style={{ fontSize: "0.98rem", fontWeight: 800, color: "#1a1f71", marginBottom: 3 }}>{c.title}</h3>
+                    <p style={{ fontSize: "0.78rem", color: "#64748b", lineHeight: 1.4 }}>{c.desc}</p>
+                  </div>
+                </div>
+                <div style={{ textAlign: "right", marginLeft: 16 }}>
+                  <span style={{
+                    padding: "3px 8px", borderRadius: 6,
+                    background: comingSoon ? "#94a3b8" : "#f5c518", color: comingSoon ? "#ffffff" : "#1a1f71",
+                    fontSize: "0.62rem", fontWeight: 800, textTransform: "uppercase",
+                  }}>{comingSoon ? "Coming Soon" : c.tag}</span>
+                  <div style={{ fontSize: "0.72rem", color: "#94a3b8", marginTop: 6, fontWeight: 600 }}>{c.count} Qs</div>
                 </div>
               </div>
-              <div style={{ textAlign: "right", marginLeft: 16 }}>
-                <span style={{
-                  padding: "3px 8px", borderRadius: 6,
-                  background: "#f5c518", color: "#1a1f71",
-                  fontSize: "0.62rem", fontWeight: 800, textTransform: "uppercase",
-                }}>{c.tag}</span>
-                <div style={{ fontSize: "0.72rem", color: "#94a3b8", marginTop: 6, fontWeight: 600 }}>{c.count} Qs</div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Unified start test card */}
@@ -561,24 +565,34 @@ export default function Dashboard() {
               { id: "audio", label: "Audio TTS", icon: "🎧" },
               { id: "image", label: "Image Psych", icon: "🖼️" },
               { id: "video", label: "Video GIF", icon: "🎬" }
-            ].map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  setSidebarOpen(window.innerWidth > 768);
-                  nav("/test", { state: { startCategory: cat.id } });
-                }}
-                className="test-sidebar-item"
-                style={{
-                  padding: "8px 12px",
-                  fontSize: "0.8rem",
-                  borderRadius: 6
-                }}
-              >
-                <span>{cat.icon}</span>
-                <span>{cat.label}</span>
-              </button>
-            ))}
+            ].map(cat => {
+              const comingSoon = cat.id === "video";
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    if (comingSoon) return;
+                    setSidebarOpen(window.innerWidth > 768);
+                    nav("/test", { state: { startCategory: cat.id } });
+                  }}
+                  disabled={comingSoon}
+                  className="test-sidebar-item"
+                  style={{
+                    padding: "8px 12px",
+                    fontSize: "0.8rem",
+                    borderRadius: 6,
+                    opacity: comingSoon ? 0.5 : 1,
+                    cursor: comingSoon ? "not-allowed" : "pointer"
+                  }}
+                >
+                  <span>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                  {comingSoon && (
+                    <span style={{ fontSize: "0.55rem", fontWeight: 800, color: "#f5c518", marginLeft: 6 }}>SOON</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
           <button 

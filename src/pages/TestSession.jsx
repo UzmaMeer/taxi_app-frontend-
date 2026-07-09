@@ -212,27 +212,35 @@ export default function TestSession() {
               ].map(cat => {
                 const count = qs.filter(item => item.category === cat.id).length;
                 const active = q?.category === cat.id;
+                const comingSoon = cat.id === "video";
                 return (
                   <button
                     key={cat.id}
-                    onClick={() => { jumpToCategory(cat.id); setSidebarOpen(window.innerWidth > 768); }}
+                    onClick={() => { if (comingSoon) return; jumpToCategory(cat.id); setSidebarOpen(window.innerWidth > 768); }}
+                    disabled={comingSoon}
                     className={`test-sidebar-item ${active ? "active" : ""}`}
                     style={{
                       padding: "6px 10px",
                       fontSize: "0.8rem",
-                      borderRadius: 6
+                      borderRadius: 6,
+                      opacity: comingSoon ? 0.5 : 1,
+                      cursor: comingSoon ? "not-allowed" : "pointer"
                     }}
                   >
                     <span>{cat.icon}</span>
                     <span style={{ flex: 1 }}>{cat.label}</span>
-                    <span style={{
-                      fontSize: "0.7rem",
-                      background: active ? "#1e1b4b" : "rgba(255,255,255,0.1)",
-                      color: active ? "#f5c518" : "#cbd5e1",
-                      padding: "1px 6px",
-                      borderRadius: 4,
-                      fontWeight: 800
-                    }}>{count}</span>
+                    {comingSoon ? (
+                      <span style={{ fontSize: "0.6rem", fontWeight: 800, color: "#f5c518" }}>SOON</span>
+                    ) : (
+                      <span style={{
+                        fontSize: "0.7rem",
+                        background: active ? "#1e1b4b" : "rgba(255,255,255,0.1)",
+                        color: active ? "#f5c518" : "#cbd5e1",
+                        padding: "1px 6px",
+                        borderRadius: 4,
+                        fontWeight: 800
+                      }}>{count}</span>
+                    )}
                   </button>
                 );
               })}
