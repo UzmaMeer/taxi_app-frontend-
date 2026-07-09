@@ -113,6 +113,19 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
 
 
 
+      {/* ── Stimulus context (reading passage / sign / message the question refers to) ── */}
+      {question.stimulus_text && (
+        <div style={{
+          background: "#f1f3f9", border: "1px solid #e2e8f0", borderRadius: 14,
+          padding: "14px 18px", marginBottom: 20, display: "flex", gap: 10, alignItems: "flex-start"
+        }}>
+          <span style={{ fontSize: 18, lineHeight: 1.4 }}>📄</span>
+          <p style={{ margin: 0, fontSize: "0.92rem", color: "#334155", fontWeight: 600, lineHeight: 1.6 }}>
+            {question.stimulus_text}
+          </p>
+        </div>
+      )}
+
       {/* ── Metadata Tags (Behavioral Category & Difficulty) ── */}
       {(question.difficulty || question.behavioral_category) && (
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 20 }}>
