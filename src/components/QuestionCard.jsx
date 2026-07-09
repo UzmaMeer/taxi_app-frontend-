@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { getMediaURL } from "../services/api";
 
 const LABELS = ["1", "2", "3", "4", "5", "6"];
@@ -18,9 +18,20 @@ function applyNarrationRate(el) {
   el.webkitPreservesPitch = true;
 }
 
-function AudioZone({ src, label }) {
+function AudioZone({ src, label, autoPlay, onAutoPlayed }) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef(null);
+
+  // Fires once per mount — combined with the caller only passing autoPlay=true on a
+  // question's first-ever visit, this guarantees auto-play happens exactly once and
+  // never again on revisits (manual Play/Replay still always works either way).
+  useEffect(() => {
+    if (!autoPlay || !audioRef.current) return;
+    applyNarrationRate(audioRef.current);
+    audioRef.current.play().catch(() => {});
+    if (onAutoPlayed) onAutoPlayed();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = () => {
     if (!audioRef.current) return;
@@ -66,7 +77,7 @@ function AudioZone({ src, label }) {
   );
 }
 
-export default function QuestionCard({ question, selectedAnswer, onSelect }) {
+export default function QuestionCard({ question, selectedAnswer, onSelect, autoPlayed, onAutoPlay }) {
   return (
     <div className="card" style={{ padding: "clamp(24px, 4vw, 36px)", overflow: "hidden" }}>
 
@@ -82,9 +93,14 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
         </div>
       )}
 
-      {/* ── Image scenario narration (optional) ── */}
+      {/* ── Image scenario narration (optional) — auto-plays once on first visit only ── */}
       {question.category === "image" && question.audio_url && (
-        <AudioZone src={question.audio_url} label="🎧 Listen to the scenario narration, then select your answer" />
+        <AudioZone
+          src={question.audio_url}
+          label="🎧 Listen to the scenario narration, then select your answer"
+          autoPlay={!autoPlayed}
+          onAutoPlayed={onAutoPlay}
+        />
       )}
 
       {/* ── Video (Dashcam Footage Simulation) ── */}

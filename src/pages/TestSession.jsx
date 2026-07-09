@@ -20,6 +20,10 @@ export default function TestSession() {
   const [time, setTime] = useState(DURATION);
   const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
   const tRef = useRef(null);
+  // Tracks which questions have already auto-played their audio once, so revisiting
+  // a question never auto-plays again. A ref (not state) since it's a one-way flag
+  // that doesn't need to trigger a re-render when it changes.
+  const autoPlayedRef = useRef(new Set());
 
   const startCategory = state?.startCategory;
 
@@ -260,9 +264,9 @@ export default function TestSession() {
                     onClick={() => { setIdx(i); setSidebarOpen(window.innerWidth > 768); }}
                     style={{
                       width: "100%", height: 38, borderRadius: 8,
-                      background: here ? "#f5c518" : filled ? "rgba(16, 185, 129, 0.15)" : "rgba(255,255,255,0.05)",
+                      background: here ? "#f5c518" : filled ? "#10b981" : "rgba(255,255,255,0.05)",
                       border: here ? "2px solid #f5c518" : filled ? "2px solid #10b981" : "2px solid rgba(255,255,255,0.1)",
-                      color: here ? "#1e1b4b" : filled ? "#10b981" : "#cbd5e1",
+                      color: here ? "#1e1b4b" : filled ? "#ffffff" : "#cbd5e1",
                       fontWeight: 800, fontSize: "0.78rem", cursor: "pointer",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       transition: "all 0.15s"
@@ -352,7 +356,13 @@ export default function TestSession() {
 
           {/* Question */}
           <div className="anim-right" key={q.id}>
-            <QuestionCard question={q} selectedAnswer={ans[q.id]} onSelect={opt => pick(q.id, opt)}/>
+            <QuestionCard
+              question={q}
+              selectedAnswer={ans[q.id]}
+              onSelect={opt => pick(q.id, opt)}
+              autoPlayed={autoPlayedRef.current.has(q.id)}
+              onAutoPlay={() => autoPlayedRef.current.add(q.id)}
+            />
           </div>
 
           {/* Nav */}
@@ -372,9 +382,9 @@ export default function TestSession() {
               return (
                 <button key={item.id} type="button" onClick={() => setIdx(i)} style={{
                   width: 36, height: 36, borderRadius: 10,
-                  background: here ? "#eef0fa" : filled ? "#ecfdf5" : "#f7f8fc",
-                  border: here ? "2px solid #1a1f71" : filled ? "2px solid #27ae60" : "2px solid #e8ecf2",
-                  color: here ? "#1a1f71" : filled ? "#27ae60" : "#94a3b8",
+                  background: here ? "#eef0fa" : filled ? "#10b981" : "#f7f8fc",
+                  border: here ? "2px solid #1a1f71" : filled ? "2px solid #10b981" : "2px solid #e8ecf2",
+                  color: here ? "#1a1f71" : filled ? "#ffffff" : "#94a3b8",
                   fontWeight: 800, fontSize: "0.78rem", cursor: "pointer", fontFamily: "inherit",
                   transition: "all 0.2s ease",
                 }}>{i + 1}</button>
