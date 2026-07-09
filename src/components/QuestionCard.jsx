@@ -116,17 +116,17 @@ export default function QuestionCard({ question, selectedAnswer, onSelect }) {
       {/* ── Stimulus context (reading passage / sign / message the question refers to) ── */}
       {question.stimulus_text && (
         <div style={{
-          background: "linear-gradient(135deg, #eef0fa 0%, #f7f8fc 100%)",
-          borderLeft: "3px solid #1a1f71", borderRadius: "0 14px 14px 0",
-          padding: "12px 18px 14px", marginBottom: 20
+          background: "#e3e7f8", border: "1px solid #c7cce6",
+          borderLeft: "4px solid #1a1f71", borderRadius: "0 14px 14px 0",
+          padding: "13px 18px 15px", marginBottom: 20, boxShadow: "0 2px 8px rgba(26, 31, 113, 0.10)"
         }}>
           <div style={{
             fontSize: "0.7rem", fontWeight: 800, color: "#1a1f71",
-            textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 5
+            textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 6
           }}>
             📄 Reference Material
           </div>
-          <p style={{ margin: 0, fontSize: "0.92rem", color: "#334155", fontStyle: "italic", lineHeight: 1.6 }}>
+          <p style={{ margin: 0, fontSize: "0.92rem", color: "#1e293b", fontWeight: 600, lineHeight: 1.6 }}>
             {question.stimulus_text}
           </p>
         </div>
